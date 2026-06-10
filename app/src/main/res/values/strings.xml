@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Diário Alimentação</string>
+    <string name="start_service">Ativar shake</string>
+    <string name="stop_service">Desativar shake</string>
+    <string name="status_on">Ativo: balance o celular para tirar foto</string>
+    <string name="status_off">Desativado</string>
+    <string name="notif_title">Diário Alimentação ativo</string>
+    <string name="notif_text">Balance o celular para tirar uma foto</string>
+</resources>

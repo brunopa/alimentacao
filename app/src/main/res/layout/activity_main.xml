@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/status_off"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/toggleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_service"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/testPhotoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tirar foto agora (teste)"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_marginBottom="24dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ajustes"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sensibilidade do shake"
+            android:textSize="15sp" />
+
+        <RadioGroup
+            android:id="@+id/sensGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <RadioButton
+                android:id="@+id/sensLow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Baixa" />
+
+            <RadioButton
+                android:id="@+id/sensNormal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Normal" />
+
+            <RadioButton
+                android:id="@+id/sensHigh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Alta" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Baixa = precisa balançar forte • Alta = abre fácil"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/delayLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tempo para focar antes da foto: 1.5 s"
+            android:textSize="15sp" />
+
+        <SeekBar
+            android:id="@+id/delaySeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:min="500"
+            android:max="3000"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mais tempo = foco melhor, porém demora mais para capturar"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="24dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Envio para a web (nuvem)"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deixe em branco para não enviar. Cada usuário usa o próprio token."
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/wsUrlInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Endereço do webservice (https://...)"
+            android:inputType="textUri"
+            android:autofillHints="url"
+            android:maxLines="2"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/apiTokenInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="API token"
+            android:inputType="textNoSuggestions"
+            android:autofillHints="password"
+            android:maxLines="1"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/saveUploadButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/testUploadButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Testar envio"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/uploadStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="13sp"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/diaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver diário (em breve)"
+            style="?attr/materialButtonOutlinedStyle"
+            android:enabled="false" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,31 @@
+# ===== Android / Gradle =====
+.gradle/
+build/
+app/build/
+*.apk
+*.aab
+*.ap_
+*.dex
+local.properties
+.idea/
+*.iml
+captures/
+.kotlin/
+.cxx/
+
+# Mantemos o Gradle wrapper versionado (gradlew, gradlew.bat, gradle/wrapper/*)
+
+# ===== Cloudflare / Node =====
+cloud/node_modules/
+cloud/.wrangler/
+cloud/.dev.vars
+
+# ===== Config local do Claude Code =====
+.claude/settings.local.json
+
+# ===== Segredos / arquivos locais =====
+cloud/prefs_seed.xml
+*.keystore
+*.jks
+.env
+.env.*

@@ -1,0 +1,13 @@
+{
+  "name": "alimentacao-cloud",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Backend Cloudflare (Worker + R2 + D1) do Diario Alimentacao",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}
