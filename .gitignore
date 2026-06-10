@@ -19,6 +19,8 @@ captures/
 cloud/node_modules/
 cloud/.wrangler/
 cloud/.dev.vars
+# .wrangler/ em qualquer lugar (ex.: gerado ao rodar wrangler da raiz)
+.wrangler/
 
 # ===== Config local do Claude Code =====
 .claude/settings.local.json
