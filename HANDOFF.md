@@ -50,6 +50,8 @@ alimentacao/
 
 **GitHub:** https://github.com/brunopa/alimentacao (público, branch `main`).
 
+**Worker (produção):** https://alimentacao.bruno-5fe.workers.dev (conta `bruno-5fe` / Bruno@buscaprev.com.br).
+
 ---
 
 ## 3. App Android — detalhes técnicos
@@ -108,6 +110,7 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 | GET | `/owner/:uploadToken` | página do **dono** (editável) |
 | GET | `/owner/:uploadToken/img/:id` | imagem (valida via `upload_token`) |
 | POST | `/owner/:uploadToken/meal/:id` | salva `{meal_type, note}` (JSON) |
+| POST | `/owner/:uploadToken/meal/:id/delete` | **exclui** a foto (apaga do R2 + D1) |
 | GET | `/` | health check |
 
 ### Classificação automática por horário (timezone America/Sao_Paulo)
@@ -167,6 +170,7 @@ npx wrangler d1 execute alimentacao-db --remote --command \
 - ✅ App completo: shake → foto → save → upload resiliente. Ajustes de sensibilidade e tempo.
 - ✅ Campos de webservice URL + API token no app (preparado para multiusuário).
 - ✅ Backend completo: upload, classificação por horário, páginas nutri (leitura) e dono (edição), navegação por semana, entrega de imagem do R2.
+- ✅ Botão **Excluir foto** na página do dono (rota `/owner/.../meal/:id/delete`, apaga R2+D1). Motivo: sensor de chacoalho estava sensível e subiu fotos indesejadas. **Pendente (falado pelo Bruno):** rever camada de permissão para exclusão — hoje qualquer um com o `upload_token` exclui, sem confirmação extra além do `confirm()` do navegador.
 - ✅ Monorepo publicado no GitHub (`brunopa/alimentacao`, commit inicial em `main`).
 - ✅ README com instruções de build/deploy.
 - ✅ Pipeline validado ponta-a-ponta: última foto real `id=4` (`ALIM_20260610_203603.jpg`, device 2412DPC0AG, classificada "Jantar") confirmada no D1 via fluxo WorkManager.

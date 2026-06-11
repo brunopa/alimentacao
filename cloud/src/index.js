@@ -42,6 +42,9 @@ export default {
       if (request.method === "GET" && parts[0] === "owner" && parts[2] === "img" && parts.length === 4) {
         return await handleImage(env, parts[1], parts[3], "upload_token");
       }
+      if (request.method === "POST" && parts[0] === "owner" && parts[2] === "meal" && parts[4] === "delete" && parts.length === 5) {
+        return await handleDeleteMeal(env, parts[1], parts[3]);
+      }
       if (request.method === "POST" && parts[0] === "owner" && parts[2] === "meal" && parts.length === 4) {
         return await handleEditMeal(request, env, parts[1], parts[3]);
       }
@@ -125,6 +128,26 @@ async function handleEditMeal(request, env, uploadToken, mealId) {
   ).bind(mealType || null, note || null, mealId, user.id).run();
 
   if (!res.meta.changes) return json({ ok: false, error: "Refeicao nao encontrada" }, 404);
+  return json({ ok: true });
+}
+
+// ---------- Excluir refeicao (dono) ----------
+
+async function handleDeleteMeal(env, uploadToken, mealId) {
+  const user = await env.DB.prepare("SELECT id FROM users WHERE upload_token = ?")
+    .bind(uploadToken).first();
+  if (!user) return json({ ok: false, error: "Token invalido" }, 403);
+
+  const row = await env.DB.prepare(
+    "SELECT r2_key FROM meals WHERE id = ? AND user_id = ?"
+  ).bind(mealId, user.id).first();
+  if (!row) return json({ ok: false, error: "Refeicao nao encontrada" }, 404);
+
+  // Apaga o arquivo do R2 (ignora falha) e o registro do D1.
+  try { await env.FOTOS.delete(row.r2_key); } catch (_) {}
+  await env.DB.prepare("DELETE FROM meals WHERE id = ? AND user_id = ?")
+    .bind(mealId, user.id).run();
+
   return json({ ok: true });
 }
 
@@ -237,6 +260,8 @@ function renderPage(user, token, meals, editable) {
   .note { font-size:13px; color:#555; white-space:pre-wrap; }
   .edit select, .edit input { width:100%; font-size:13px; padding:5px; margin-top:6px; border:1px solid #ccc; border-radius:6px; }
   .edit button { margin-top:6px; width:100%; font-size:13px; padding:6px; background:var(--verde); color:#fff; border:none; border-radius:6px; cursor:pointer; }
+  .edit button.del { margin-top:4px; background:#c62828; }
+  .edit button:disabled { opacity:.5; cursor:default; }
   .edit .saved { color:var(--verde); font-size:12px; }
   .empty { color:#888; text-align:center; margin-top:40px; }
   .hint { background:#fff8e1; border:1px solid #ffe082; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px; }
@@ -265,7 +290,8 @@ function renderMeta(it, editable) {
   return `<div class="meta edit">
     <select class="mt"><option value="">(sem tipo)</option>${options}</select>
     <input class="nt" type="text" maxlength="500" placeholder="Observacao..." value="${esc(it.note)}">
-    <button class="sv">Salvar</button>
+    <button class="sv" type="button">Salvar</button>
+    <button class="del" type="button">Excluir foto</button>
     <span class="saved"></span>
   </div>`;
 }
@@ -274,13 +300,12 @@ function ownerScript(token) {
   return `<script>
   const TK = ${JSON.stringify(token)};
   document.querySelectorAll(".card").forEach(card => {
+    const id = card.getAttribute("data-id");
+    const saved = card.querySelector(".saved");
     const btn = card.querySelector(".sv");
-    if (!btn) return;
-    btn.addEventListener("click", async () => {
-      const id = card.getAttribute("data-id");
+    if (btn) btn.addEventListener("click", async () => {
       const meal_type = card.querySelector(".mt").value;
       const note = card.querySelector(".nt").value;
-      const saved = card.querySelector(".saved");
       btn.disabled = true; saved.textContent = "salvando...";
       try {
         const r = await fetch("/owner/" + encodeURIComponent(TK) + "/meal/" + id, {
@@ -293,6 +318,18 @@ function ownerScript(token) {
       } catch (e) { saved.textContent = "falha de rede"; }
       btn.disabled = false;
       setTimeout(() => saved.textContent = "", 2500);
+    });
+
+    const del = card.querySelector(".del");
+    if (del) del.addEventListener("click", async () => {
+      if (!confirm("Excluir esta foto? Esta acao nao pode ser desfeita.")) return;
+      del.disabled = true; saved.textContent = "excluindo...";
+      try {
+        const r = await fetch("/owner/" + encodeURIComponent(TK) + "/meal/" + id + "/delete", { method: "POST" });
+        const j = await r.json();
+        if (j.ok) { card.remove(); return; }
+        saved.textContent = "erro: " + (j.error||""); del.disabled = false;
+      } catch (e) { saved.textContent = "falha de rede"; del.disabled = false; }
     });
   });
   </script>`;
